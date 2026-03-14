@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # F1 Telemetry Analytics Pipeline
 
 Automated F1 data extraction and analytics pipeline with Snowflake cloud data warehouse.
@@ -8,15 +9,7 @@ Automated F1 data extraction and analytics pipeline with Snowflake cloud data wa
 ```powershell
 pip install -r requirements.txt
 ```
-
-2. **Configure Snowflake:**
-
-Your Snowflake credentials are already configured in `snowflake_config.py`:
-- Account: `SRAFERN-PH02712.snowflakecomputing.com`
-- Database: `F1DATA`
-- Schema: `PUBLIC`
-- Warehouse: `COMPUTE_WH`
-
+setup an env ( see example .env.example)
 ## Usage
 
 **Run the complete pipeline:**
@@ -58,24 +51,15 @@ All data loaded to: `F1DATA.PUBLIC.*`
 
 ### Power BI
 1. Get Data → More → Snowflake
-2. Server: `SRAFERN-PH02712.snowflakecomputing.com`
-3. Database: `F1DATA`
-4. Schema: `PUBLIC`
-5. Warehouse: `COMPUTE_WH`
-6. Enter your Snowflake credentials
+
 
 ### Tableau
 1. Connect → Snowflake
-2. Server: `SRAFERN-PH02712.snowflakecomputing.com`
-3. Database: `F1DATA`
-4. Schema: `PUBLIC`
-5. Warehouse: `COMPUTE_WH`
-6. Enter your Snowflake credentials
+
 
 ### Excel / Other Tools
 1. Use Snowflake ODBC driver
-2. Connection string: `SRAFERN-PH02712.snowflakecomputing.com`
-3. Database: `F1DATA`
+
 
 ## Benefits of Snowflake
 
@@ -88,15 +72,11 @@ All data loaded to: `F1DATA.PUBLIC.*`
 ## Troubleshooting
 
 **Snowflake connection fails:**
-- Verify credentials in `snowflake_config.py`
 - Check warehouse is running in Snowflake UI
 - Ensure your IP is whitelisted (if network policies enabled)
 - Test connection in Snowflake web UI first
 
-**Tables not appearing:**
-- Verify you're looking in `F1DATA.PUBLIC` schema
-- Check warehouse is active
-- Query: `SHOW TABLES IN F1DATA.PUBLIC;`
+
 
 ## File Structure
 ```
@@ -109,3 +89,7 @@ All data loaded to: `F1DATA.PUBLIC.*`
 └── telemetry_out/             # Raw CSV exports (backup)
 ```
 
+=======
+# F1-Telemetry-Analysis-Visualizations
+F1 Telemetry analysis project
+>>>>>>> 20af8e7ceee14af7ddf52b5b61768ca2cc50bb1f
