@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # F1 Telemetry Analytics Pipeline
 
 Automated F1 data extraction and analytics pipeline with Snowflake cloud data warehouse.
@@ -89,7 +88,7 @@ All data loaded to: `F1DATA.PUBLIC.*`
 └── telemetry_out/             # Raw CSV exports (backup)
 ```
 
-=======
+
 # F1-Telemetry-Analysis-Visualizations
 F1 Telemetry analysis project
 >>>>>>> 20af8e7ceee14af7ddf52b5b61768ca2cc50bb1f
