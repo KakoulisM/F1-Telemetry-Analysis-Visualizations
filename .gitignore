@@ -1,0 +1,42 @@
+# Python virtual environment
+.venv/
+
+# Configuration files
+config/
+
+# Logs and cache
+logs/
+f1_cache/
+
+# Driver reports and models
+driver_reports/
+models/
+
+# Schedule and static files
+schedule/
+static/
+
+# Output folders
+telemetry_out/
+tools/
+visualizations/
+
+# Credentials and secrets
+snowflake_config.py
+
+# Random scripts to exclude (breaks build for others)
+docker_validate.py
+run_deg_png.py
+aggregate_testing.py
+check_latest_event.py
+stint_analysis_dev.py
+
+# Ignore Jupyter cache
+__pycache__/
+
+# Ignore CSV and output files
+*.csv
+*.json
+*.png
+
+.env 

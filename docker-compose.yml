@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  f1-scheduler:
+    build: .
+    container_name: f1-telemetry-scheduler
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import json, sys, datetime; data = json.load(open('/app/logs/health.json')); last = datetime.datetime.fromisoformat(data['last_check']); sys.exit(0 if (datetime.datetime.now(datetime.timezone.utc) - last).seconds < 360 else 1)\" || exit 1"]
+      interval: 5m
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    environment:
+      # Snowflake credentials (must be set in .env file)
+      SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
+      SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+      SNOWFLAKE_DATABASE: ${SNOWFLAKE_DATABASE:-F1DATA}
+      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE:-COMPUTE_WH}
+      SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE:-ACCOUNTADMIN}
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
+      TZ: ${TIMEZONE:-UTC}
+    volumes:
+      # Persist logs, cache, and output
+      - ./logs:/app/logs
+      - ./telemetry_out:/app/telemetry_out
+      - ./f1_cache:/app/f1_cache
+      - ./models:/app/models
+      - ./driver_reports:/app/driver_reports
+      # Mount schedule files for easy updates
+      - ./schedule:/app/schedule:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  status-api:
+    build: .
+    container_name: f1-status-api
+    restart: unless-stopped
+    entrypoint: []
+    command: ["python", "-u", "status_api.py"]
+    ports:
+      - "${API_PORT:-5000}:5000"
+    environment:
+      SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
+      SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+      SNOWFLAKE_DATABASE: ${SNOWFLAKE_DATABASE:-F1DATA}
+      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE:-COMPUTE_WH}
+      SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE:-ACCOUNTADMIN}
+      API_PORT: 5000
+      API_DEBUG: ${API_DEBUG:-false}
+      TZ: ${TIMEZONE:-UTC}
+    volumes:
+      - ./logs:/app/logs:ro
+      - ./schedule:/app/schedule:ro
+      - ./telemetry_out:/app/telemetry_out:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
